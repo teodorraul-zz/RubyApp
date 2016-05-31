@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+      <title>Ruby App</title>
+      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+      <link rel="stylesheet" href="css/main.css">
+      <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+   </head>
+   <body ng-app="ruby-app" ng-controller="ruby-controller">
+      <nav class="navbar navbar-inverse">
+         <a class="navbar-brand" href="#">The Ruby App</a>
+      </nav>
+      <div class="container">
+      <h1>The Ruby App<small>with some Angular</small></h1>
+      <div class="row">
+         <div class="col-md-5 panel-parent">
+            <div class="panel panel-default">
+               <div class="panel-heading">
+                  <h3 class="panel-title"><span class="glyphicon glyphicon glyphicon-star" aria-hidden="true"></span>Companies</h3>
+                  <button class="btn btn-default btn-md float-right" ng-click="addCompanyClicked()">New Company</button>
+               </div>
+               <div class="panel-body company-panel-body">
+                  <table class="table table-hover">
+                     <thead>
+                        <tr>
+                           <th class="table-id">ID</th>
+                           <th class="table-name">Name</th>
+                           <th class="table-options">Options</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr class="company-row" ng-repeat="company in companies | orderBy: 'id'" ng-click="selectCompany(company.id, $event)">
+                           <td>{{company.id}}</td>
+                           <td>{{company.name}}</td>
+                           <td>
+                              <a ng-click="editCompanyClicked(company.id)">Edit</a>
+                              <span class="span-divider"></span>
+                              <a ng-click="deleteCompanyClicked(company.id)">Delete</a>
+                              <span class="span-divider"></span>
+                              <a ng-click="showCompanyVersionings(company.id)">Versioning</a>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </div>
+         <div class="col-md-7 panel-parent" ng-switch="displayEmployees">
+            <div class="panel panel-default" ng-switch-default>
+               <div class="panel-heading">
+                  <h3 class="panel-title"><span class="glyphicon glyphicon glyphicon-user" aria-hidden="true"></span>Employees</h3>
+               </div>
+               <div class="panel-body">
+                  <p class="text-align-center no-company-clicked">Click a company to display some data.</p>
+               </div>
+            </div>
+            <div class="panel panel-default" ng-switch-when="true">
+               <div class="panel-heading">
+                  <h3 class="panel-title">
+                     <span class="glyphicon glyphicon glyphicon-user" aria-hidden="true"></span>Employees
+                  </h3>
+                  <button class="btn btn-default btn-sm float-right" ng-click="addEmployeeClicked()">Add Employee</button>
+               </div>
+               <div class="panel-body">
+                  <div class="bg-primary company-detailed-view">
+                     <h2 class="company-name">{{selected_company.name}}</h2>
+                     <div class="company-detailed-links">
+                        <a ng-click="editCompanyClicked(selected_company.id)">Edit</a><span class="span-divider"></span><a ng-click="deleteCompanyClicked(selected_company.id)">Delete</a>
+                     </div>
+                     <table class="table company-details">
+                        <tbody>
+                           <tr>
+                              <td><span>ID: </span>{{selected_company.id}}</td>
+                              <td><span>Company ID: </span>{{selected_company.company_identification}}</td>
+                           </tr>
+                           <tr>
+                              <td><span>Name: </span>{{selected_company.name}}</td>
+                              <td><span>Address: </span>{{selected_company.address}}</td>
+                           </tr>
+                           <tr>
+                              <td><span>City: </span>{{selected_company.city}}</td>
+                              <td><span>Country: </span>{{selected_company.country}}</td>
+                           </tr>
+                           <tr>
+                              <td ng-show="selected_company.email"><span>Email: </span>{{selected_company.email}}</td>
+                              <td ng-show="selected_company.phone_number"><span>Phone Number: </span>{{selected_company.phone_number}}</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <p class="text-align-center no-company-clicked" ng-show="!employees.length">Seems like the company has no employees. Try adding one.</p>
+                  <div ng-show="employees.length">
+                     <table class="table employees-table">
+                        <thead>
+                           <tr>
+                              <th>ID</th>
+                              <th>Name</th>
+                              <th>Position</th>
+                              <th class="table-options">Options</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr ng-repeat="employee in employees | orderBy: 'id'" ng-click="selectEmployee(employee.id)">
+                              <td>{{employee.id}}</td>
+                              <td>{{employee.name}}</td>
+                              <td>{{employee.position}}</td>
+                              <td><a ng-click="editEmployeeClicked(employee.id)">Edit</a><span class="span-divider"></span><a ng-click="deleteEmployeeClicked(employee.id)">Delete</a>
+                                 <span class="span-divider"></span>
+                                 <a ng-click="showEmployeeVersionings(employee.id)">Versioning</a>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!--COMPANY MODAL-->
+         <div class="modal fade" id="companyVersioningModal" tabindex="-1" role="document">
+            <div class="modal-dialog" role="dialog">
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                     </button>
+                     <h4 class="modal-title" id="companyModalValue">{{selected_company.name}} - Past Versions</h4>
+                     <div class="alert alert-info" ng-show="!companyVersionings.length" role="alert"><b>Edit the company</b> to be able to see previous versions</div>
+                  </div>
+                  <div class="modal-body container-fluid">
+                     <table class="table">
+                        <thead>
+                           <tr>
+                              <th>Name</th>
+                              <th>CID</th>
+                              <th>Address</th>
+                              <th>City</th>
+                              <th>Country</th>
+                              <th>Email</th>
+                              <th>Phone</th>
+                              <th>Date</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr class="curent-version-versioning">
+                              <td>{{selected_company.name}}</td>
+                              <td>{{selected_company.company_identification}}</td>
+                              <td>{{selected_company.address}}</td>
+                              <td>{{selected_company.city}}</td>
+                              <td>{{selected_company.country}}</td>
+                              <td>{{selected_company.email}}</td>
+                              <td>{{selected_company.phone_number}}</td>
+                              <td>{{selected_company.updated_at | date: "hh:mm:ss, dd MMM yyyy"}}</td>
+                           </tr>
+                           <tr ng-repeat="version in companyVersionings">
+                              <td>{{version.name}}</td>
+                              <td>{{version.company_identification}}</td>
+                              <td>{{version.address}}</td>
+                              <td>{{version.city}}</td>
+                              <td>{{version.country}}</td>
+                              <td>{{version.email}}</td>
+                              <td>{{version.phone_number}}</td>
+                              <td>{{version.created_at | date: "hh:mm:ss, dd MMM yyyy"}}</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!--COMPANY MODAL-->
+         <div class="modal fade" id="companyModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="dialog">
+               <div class="modal-content">
+                  <form ng-submit="companyModal.done()">
+                     <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="companyModalValue">Add a new Company</h4>
+                     </div>
+                     <div class="modal-body container-fluid">
+                        <div class="panel panel-default">
+                           <div class="panel-heading">Legal Info</div>
+                           <div class="panel-body container-fluid">
+                              <div class="col-xs-6 col-md-6">
+                                 <div class="form-group">
+                                    <label for="addCompanyEmail">Company Name (*)</label>
+                                    <input  tabindex="1" type="text" class="form-control" id="addCompanyEmail" placeholder="Name" ng-model="companyModal.name">
+                                 </div>
+                              </div>
+                              <div class="col-xs-6 col-md-6">
+                                 <div class="form-group">
+                                    <label for="addCompanyID">Company ID (*)</label>
+                                    <input tabindex="2" type="text" class="form-control" id="addCompanyID" placeholder="CompanyID" ng-model="companyModal.company_identification">
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="panel-heading">Location</div>
+                           <div class="panel-body">
+                              <div class="col-xs-6 col-md-6">
+                                 <div class="form-group">
+                                    <label for="addCompanyAddress">Company address (*)</label>
+                                    <input tabindex="3" type="text" class="form-control" id="addCompanyAddress" placeholder="Address" ng-model="companyModal.address">
+                                 </div>
+                                 <div class="form-group">
+                                    <label for="addCompanyCountry">Country (*)</label>
+                                    <input tabindex="5" type="text" class="form-control" id="addCompanyCountry" placeholder="Country" ng-model="companyModal.country">
+                                 </div>
+                              </div>
+                              <div class="col-xs-6 col-md-6">
+                                 <div class="form-group">
+                                    <label for="addCompanyCity">City (*)</label>
+                                    <input tabindex="4" type="text" class="form-control" id="addCompanyCity" placeholder="City" ng-model="companyModal.city">
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="panel-heading">Contact Info</div>
+                           <div class="panel-body container-fluid">
+                              <div class="col-xs-6 col-md-6">
+                                 <div class="form-group">
+                                    <label for="addCompanyEmail">Email</label>
+                                    <input tabindex="6" type="email" class="form-control" id="addCompanyEmail" placeholder="Email" ng-model="companyModal.email">
+                                 </div>
+                              </div>
+                              <div class="col-xs-6 col-md-6">
+                                 <div class="form-group">
+                                    <label for="addCompanyPhoneNumber">Phone Number</label>
+                                    <input tabindex="7" type="text" class="form-control" id="addCompanyPhoneNumber" placeholder="Phone Number" ng-model="companyModal.phone_number">
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <ul class="alert alert-danger errors-in-form" role="alert" ng-show="companyModal.errors.length">
+                        <li ng-repeat="error in companyModal.errors">{{error}}</li>
+                     </ul>
+                     <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+         <!--EMPLOYEE MODAL-->
+         <div class="modal fade" id="employeeVersioningModal" tabindex="-1" role="document">
+            <div class="modal-dialog" role="dialog">
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                     </button>
+                     <h4 class="modal-title" id="employeeModalValue">{{selected_employee.name}} - Past Versions</h4>
+                     <div class="alert alert-info" ng-show="!employeeVersionings.length" role="alert"><b>Edit the emplyee's details</b> to be able to see his previous versions</div>
+                  </div>
+                  <div class="modal-body container-fluid">
+                     <table class="table">
+                        <thead>
+                           <tr>
+                              <th>Name</th>
+                              <th>Address</th>
+                              <th>City</th>
+                              <th>Country</th>
+                              <th>Email</th>
+                              <th>Phone</th>
+                              <th>Position</th>
+                              <th>Date</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr class="curent-version-versioning">
+                              <td>{{selected_employee.name}}</td>
+                              <td>{{selected_employee.address}}</td>
+                              <td>{{selected_employee.city}}</td>
+                              <td>{{selected_employee.country}}</td>
+                              <td>{{selected_employee.email}}</td>
+                              <td>{{selected_employee.phone_number}}</td>
+                              <td>{{selected_employee.position}}</td>
+                              <td>{{selected_employee.updated_at | date: "hh:mm:ss, dd MMM yyyy"}}</td>
+                           </tr>
+                           <tr ng-repeat="version in employeeVersionings">
+                              <td>{{version.name}}</td>
+                              <td>{{version.address}}</td>
+                              <td>{{version.city}}</td>
+                              <td>{{version.country}}</td>
+                              <td>{{version.email}}</td>
+                              <td>{{version.phone_number}}</td>
+                              <td>{{version.position}}</td>
+                              <td>{{version.created_at | date: "hh:mm:ss, dd MMM yyyy"}}</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!--EMPLOYEE MODAL-->
+         <div class="modal fade" id="employeeModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="dialog">
+               <div class="modal-content">
+                  <form ng-submit="employeeModal.done()">
+                     <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="employeeModalValue">Employee</h4>
+                     </div>
+                     <div class="modal-body container-fluid">
+                        <div class="panel panel-default">
+                           <div class="panel-heading">Personal Info</div>
+                           <div class="panel-body container-fluid">
+                              <div class="col-xs-6 col-md-6">
+                                 <div class="form-group">
+                                    <label for="employeeName">Name (*)</label>
+                                    <input tabindex="1" type="text" class="form-control" id="employeeName" placeholder="Name" ng-model="employeeModal.name">
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="panel-heading">Location</div>
+                           <div class="panel-body">
+                              <div class="col-xs-6 col-md-6">
+                                 <div class="form-group">
+                                    <label for="employeeAddress">Address (*)</label>
+                                    <input tabindex="2" type="text" class="form-control" id="employeeAddress" placeholder="Address" ng-model="employeeModal.address">
+                                 </div>
+                                 <div class="form-group">
+                                    <label for="employeeCity">City (*)</label>
+                                    <input tabindex="4" type="text" class="form-control" id="employeeCity" placeholder="City" ng-model="employeeModal.city">
+                                 </div>
+                              </div>
+                              <div class="col-xs-6 col-md-6">
+                                 <div class="form-group">
+                                    <label for="employeeCountry">Country (*)</label>
+                                    <input tabindex="3" type="text" class="form-control" id="employeeCountry" placeholder="Country" ng-model="employeeModal.country">
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="panel-heading">Contact Details</div>
+                           <div class="panel-body container-fluid">
+                              <div class="col-xs-6 col-md-6">
+                                 <div class="form-group">
+                                    <label for="employeeEmail">Email</label>
+                                    <input tabindex="5" type="email" class="form-control" id="employeeEmail" placeholder="Email" ng-model="employeeModal.email">
+                                 </div>
+                              </div>
+                              <div class="col-xs-6 col-md-6">
+                                 <div class="form-group">
+                                    <label for="employeePhoneNumber">Phone Number</label>
+                                    <input tabindex="6" type="text" class="form-control" id="employeePhoneNumber" placeholder="Phone Number" ng-model="employeeModal.phone_number">
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="panel-heading">Company Details</div>
+                           <div class="panel-body container-fluid">
+                              <div class="col-xs-6 col-md-6">
+                                 <div class="form-group">
+                                    <label for="employeePosition">Position in Company(*)</label>
+                                    <input tabindex="7" type="text" class="form-control" id="employeePosition" placeholder="Position" ng-model="employeeModal.position">
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <ul class="alert alert-danger errors-in-form" role="alert" ng-show="companyModal.errors.length">
+                        <li ng-repeat="error in companyModal.errors">{{error}}</li>
+                     </ul>
+                     <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <script src="js/main.js"></script>
+   </body>
+</html>

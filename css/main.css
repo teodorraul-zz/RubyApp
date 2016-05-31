@@ -1,0 +1,146 @@
+* {
+  cursor: default;                      
+}
+
+body{
+	background-color: rgba(0,0,0,0);
+}
+
+nav.navbar.navbar-inverse{
+	border-radius: 0px;
+}
+
+h1{
+	margin-bottom:40px;
+}
+
+h1 small{
+	margin-left: 30px;
+}
+
+.glyphicon{
+	margin-right: 10px;
+}
+
+.panel{
+	position:relative;
+	padding: 0;
+}
+
+.float-right{
+	position: absolute;
+	right: 11px;
+	top: 11px;
+}
+.curent-version-versioning{
+	background-color: #E2F0DA;
+}
+.alert.alert-info{
+	margin-top:20px !important;
+	font-size:12px !important;
+}
+#companyVersioningModal .modal-dialog, #employeeVersioningModal .modal-dialog{
+    width: 900px;
+}
+.selected-company{
+	background-color: #507AB2 !important;
+	border-radius:3px !important;
+	border-top: none !important;
+	color: #fff;
+}
+
+.table-id{
+	width: 10%;
+}
+
+.table-name{
+	width: 40%;
+}
+
+.bg-primary{
+	border-radius:5px;
+	padding:30px;
+}
+.table-options{	
+	width: 50%;
+}
+
+.span-divider{
+	margin:  0 10px;
+}
+
+.company-name{
+	margin-top: 0px;
+	margin-bottom: 20px;
+}
+
+.company-panel-body{
+	padding: 0 !important;
+}
+.employees-table{
+	margin:2%;
+	width:96%;
+}
+.company-detailed-view{
+	position: relative;
+}
+.company-detailed-links{
+	position:absolute;
+	right: 30px;
+	top: 34px;
+}
+.company-detailed-links a{
+	background-color: #fff;
+	border-radius: 99px;
+	padding: 2px 15px;
+	display: inline-block;
+	color: #507AB2 !important;
+}
+.company-detailed-links .span-divider{
+	margin: 5px;
+}
+.errors-in-form{
+	padding:20px 40px;
+	border-radius:0;
+}
+.employees-table td,.employees-table th{
+	padding:16px !important;	
+}
+
+.company-details{
+	margin-top:20px;
+	margin-bottom: 0;
+}
+.company-details span{
+	color:rgba(255,255,255,0.7);
+	margin-right: 10px;
+}
+
+.company-details td{
+	height: 18px;
+	padding:3px !important;
+	border:none !important;
+}
+
+.no-company-clicked{
+	text-align:center;
+	margin-top: 20px;
+	color:#666;
+}
+
+.selected-company a{
+	text-decoration: none;
+	color: #fff;
+}
+
+tbody .company-row td{
+	padding:16px 16px !important;
+}
+
+.panel-heading{
+	padding:20px !important;
+}
+
+th{
+	padding: 16px !important;
+}
