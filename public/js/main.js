@@ -1,4 +1,4 @@
-var apiHost = "http://localhost:4567"
+var apiHost = ""
 var app = angular.module('ruby-app', [])
 app.controller('ruby-controller', function($scope,$http){
 	$scope.companies = [];
