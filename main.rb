@@ -6,6 +6,10 @@ require './environment'
 require './model'
 require './jsonvalid'
 
+get '/' do
+  redirect to('/index.html')
+end
+
 ############### READ
 
 get '/api/companies' do
